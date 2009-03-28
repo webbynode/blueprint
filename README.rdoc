@@ -1,0 +1,7 @@
+= blueprint
+
+Description goes here.
+
+== Copyright
+
+Copyright (c) 2009 Webbynode. See LICENSE for details.
