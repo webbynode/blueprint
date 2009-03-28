@@ -3,7 +3,7 @@ require "doodle"
 require "yaml"
 require "pp"
 
-module FormulaComponents
+module BlueprintComponents
   def parameter(*args, &block)
     param = Parameter.new(*args)
     yield param if block_given?
@@ -67,7 +67,7 @@ class Component
 end
 
 class Value < Component
-  include FormulaComponents
+  include BlueprintComponents
 
   creates "value" do |args, opts|
     { :content => args.pop }.merge(opts)
@@ -75,7 +75,7 @@ class Value < Component
 end
 
 class Parameter < Component
-  include FormulaComponents
+  include BlueprintComponents
 
   def value(*args)
     val = Value.new(*args)
@@ -91,7 +91,7 @@ class Parameter < Component
 end
 
 class Aggregate < Component
-  include FormulaComponents
+  include BlueprintComponents
   
   creates "aggregate" do |args, opts|
     { :label => args.pop }.merge(opts)
@@ -99,19 +99,19 @@ class Aggregate < Component
 end
 
 class Dependency < Component
-  include FormulaComponents
+  include BlueprintComponents
 
   creates "dependency" do |args, opts|
     { :content => args.pop }.merge(opts)
   end
 end
 
-class Formula
+class Blueprint
   include Doodle::Utils
-  include FormulaComponents
+  include BlueprintComponents
   
-  def initialize(formula_def)
-    @def = formula_def
+  def initialize(blueprint_def)
+    @def = blueprint_def
   end
   
   def provides(*args)
@@ -161,18 +161,18 @@ def desc(s)
   @desc = s
 end
 
-def formula(*args, &block)
-  formula_def = args.last.is_a?(Hash) ? args.pop : {}
-  formula = Formula.new(formula_def)
+def blueprint(*args, &block)
+  blueprint_def = args.last.is_a?(Hash) ? args.pop : {}
+  blueprint = Blueprint.new(blueprint_def)
   
   if block_given?
-    yield formula
+    yield blueprint
   end
   
-  formula
+  blueprint
 end
 
-rails = formula(:type => "stack", :name => "rails") do |f|
+rails = blueprint(:type => "stack", :name => "rails") do |f|
   f.provides "rails"
   
   f.parameter "version", :label => "Rails Version", :render_as => "combobox" do |p|
@@ -210,8 +210,8 @@ rails = formula(:type => "stack", :name => "rails") do |f|
   end
 end
 
-rails_rs = formula(:type => "readystack", :name => "rs.rails") do |f|
-  # this formula delivers "rs.rails"
+rails_rs = blueprint(:type => "readystack", :name => "rs.rails") do |f|
+  # this blueprint delivers "rs.rails"
   f.provides "rs.rails"
   
   # dependencies and order of execution -- top => bottom
