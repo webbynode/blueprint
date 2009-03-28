@@ -1,6 +1,10 @@
 = blueprint
 
-Description goes here.
+Blueprint is a DSL that allows creating MyStacks and CommunityStacks to be deployed on Webbynode. 
+
+The current incarnation is to be considered early alpha, and only builds the Hash required to describe the components of the Stack.
+
+As code advances, this will become a full API for interacting with Webbynode and maintaining stacks.
 
 == Copyright
 
