@@ -6,8 +6,12 @@ class Blueprint
   include Utils
   include BlueprintComponents
   
-  def initialize(blueprint_def)
-    @def = blueprint_def
+  def initialize(s)
+    if s.is_a?(Hash)
+      @def = s
+    else
+      @def[:label] = s
+    end
   end
   
   def provides(*args)
@@ -18,12 +22,14 @@ class Blueprint
       @def.merge!(opts)
       
     else
+      @def[:name] ||= s
       @def[:script] = "#{s}.sh"
       @def[:email] = "#{s}.markdown"
       
     end
     
-    (errors ||= []) << "provides requires an argument" unless @def.has_key?(:email)
+    (errors ||= []) << "provides requires the blueprint name" if @def.empty?
+    (errors ||= []) << "no blueprint name found for #{@def[:content]}" unless @def.has_key?(:name)
     (errors ||= []) << "no email template found for #{@def[:content]}" unless @def.has_key?(:email)
     (errors ||= []) << "no script found for #{@def[:content]}" unless @def.has_key?(:script)
     

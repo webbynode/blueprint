@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BlueprintTest < Test::Unit::TestCase
   def rails_blueprint
-    blueprint(:type => "stack", :name => "rails") do |f|
+    blueprint "Rails" do |f|
       f.provides "rails"
 
       f.parameter "version", :label => "Rails Version", :render_as => "combobox" do |p|
@@ -42,7 +42,7 @@ class BlueprintTest < Test::Unit::TestCase
   end
   
   def rails_readystack_blueprint
-    blueprint(:type => "readystack", :name => "rs.rails") do |f|
+    blueprint(:label => "Rails", :type => "readystack") do |f|
       # this blueprint delivers "rs.rails"
       f.provides "rs.rails"
 
