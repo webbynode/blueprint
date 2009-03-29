@@ -1,6 +1,78 @@
 = blueprint
 
-Description goes here.
+Blueprint is a DSL that allows creating MyStacks and CommunityStacks to be deployed on Webbynode. 
+
+The current incarnation is to be considered early alpha, and only builds the Hash required to describe the components of the Stack.
+
+As code advances, this will become a full API for interacting with Webbynode and maintaining stacks.
+
+== Example
+
+Code of a blueprint will be something like this:
+
+	rails_rs = blueprint(:type => "readystack", :name => "rs.rails") do |f|
+	  # this blueprint delivers "rs.rails"
+	  f.provides "rs.rails"
+  
+	  # dependencies and order of execution -- top => bottom
+	  # apache2/ngnix, mysql/postgre, passenger/mongrel
+	  f.requires :group => "webservers", 
+	             :with => ["apache2", "nginx"]
+	  f.requires :group => "database",   
+	             :with => ["mysql-server", "postgresqlserver"]
+	  f.requires "rails"
+	  f.requires :group => "proxy",      
+	             :with => ["passenger", "mongrel_cluster"]
+  
+	  # attributes
+	  f.attributes :required => 'y'
+	  f.outputs    :installed_gems => "^Installed following gems: (.*)",
+	               :success_indicator => "^SUCCESS: (.*)"
+  
+	  # always installs rails
+	  f.dependency "rails", :render_as => "hidden"
+
+	  # gives two webserver/proxy combo options:
+	  # apache2 + passenger or nginx + mongrel
+	  f.parameter "webserver-proxy", :label => "WebServer and Proxy" do |p|
+	    p.attributes :required => "y"
+
+	    p.aggregate "Apache2 and Passenger", :render_as => "radio" do |agr|
+	      agr.dependency "apache2"
+	      agr.dependency "passenger"
+	    end
+    
+	    p.aggregate "Nginx and Mongrel Cluster", :render_as => "radio" do |agr|
+	      agr.dependency "nginx"
+	      agr.dependency "mongrel_cluster"
+	    end
+    
+	    # doesn't install webserver/proxy
+	    p.aggregate "No webserver & proxy", :render_as => "radio" do |agr|
+	      agr.parameter "-"
+	    end
+	  end
+  
+	  # database options: mysql or postgresql
+	  f.parameter "database-server", :label => "Database Server" do |p|
+	    p.attributes :required => "y"
+    
+	    p.dependency "mysql-server",     :label => "MySQL",      :render_as => "radio"
+	    p.dependency "postgresqlserver", :label => "PostgreSQL", :render_as => "radio"
+	    p.no_op      "No database server", :render_as => "radio"
+	  end
+  
+	  # list of gems
+	  f.aggregate "Additional Gems" do |agr|
+	    %w{will_paginate thoughtbot-paperclip 
+	      rspec authlogic hpricot capistrano}.each do |gem|
+        
+	        agr.parameter "gem_#{gem}", :label => gem, :render_as => "checkbox"
+        
+	    end
+	  end
+	end
+
 
 == Copyright
 
