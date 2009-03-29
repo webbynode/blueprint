@@ -6,6 +6,8 @@ The current incarnation is to be considered early alpha, and only builds the Has
 
 As code advances, this will become a full API for interacting with Webbynode and maintaining stacks.
 
+Before upcoming sections, kudos to Sean O'Halpin, the guy behind the ruby lib/gem {Doodle}[http://doodle.rubyforge.org/] for allowing me to use his Doodle::Util module on this. Thanks Sean!
+
 == Example
 
 Code of a blueprint will be something like this:

@@ -1,5 +1,4 @@
 require 'test_helper'
-require '../lib/blueprint/blueprint'
 
 class BlueprintTest < Test::Unit::TestCase
   def rails_blueprint

@@ -5,10 +5,10 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "blueprint"
-    gem.summary = %Q{TODO}
+    gem.summary = %Q{Wanna build a stack? Give us the blueprint.}
     gem.email = "felipe@webbynode.com"
     gem.homepage = "http://github.com/webbynode/blueprint"
-    gem.authors = ["Webbynode"]
+    gem.authors = ["Felipe Coury"]
 
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
