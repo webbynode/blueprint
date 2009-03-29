@@ -2,14 +2,14 @@
 
 Gem::Specification.new do |s|
   s.name = %q{blueprint}
-  s.version = "0.0.0"
+  s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Felipe Coury"]
   s.date = %q{2009-03-29}
   s.email = %q{felipe@webbynode.com}
   s.extra_rdoc_files = ["README.rdoc", "LICENSE"]
-  s.files = ["README.rdoc", "lib/blueprint", "lib/blueprint/blueprint.rb", "lib/blueprint/components.rb", "lib/blueprint/utils.rb", "lib/blueprint.rb", "test/blueprint_test.rb", "test/test_helper.rb", "LICENSE"]
+  s.files = ["README.rdoc", "VERSION.yml", "lib/blueprint", "lib/blueprint/blueprint.rb", "lib/blueprint/components.rb", "lib/blueprint/utils.rb", "lib/blueprint.rb", "test/blueprint_test.rb", "test/test_helper.rb", "LICENSE"]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/webbynode/blueprint}
   s.rdoc_options = ["--inline-source", "--charset=UTF-8"]
