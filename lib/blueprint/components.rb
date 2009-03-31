@@ -23,15 +23,19 @@ module BlueprintComponents
       opts = args.last.is_a?(Hash) ? args.pop : {}
       @def = { :item_type => self.class.item_type }.merge(opts)
       if self.class.block
-        @def.merge!(self.class.block.call(args, opts))
+        @def.merge!(self.class.block.call(self, args, opts))
       end
+    end
+    
+    def remove_attribute(attr)
+      @def.delete(attr)
     end
   end
 
   class Value < Component
     include BlueprintComponents
 
-    creates "value" do |args, opts|
+    creates "value" do |obj, args, opts|
       { :content => args.pop }.merge(opts)
     end
   end
@@ -47,15 +51,28 @@ module BlueprintComponents
       add_child val
     end  
 
-    creates "param" do |args, opts|
-      { :content => args.pop }.merge(opts)
+    creates "param" do |obj, args, opts|
+      content = args.pop
+
+      if opts.key?(:values)
+        opts.delete(:values)
+
+        values = obj.remove_attribute(:values)
+        unless values.is_a?(Array)
+          raise "values should be an array for Parameter #{content}"
+        end
+        
+        values.each { |v| obj.value(v) }
+      end
+      
+      { :content => content }.merge(opts)
     end
   end
 
   class Aggregate < Component
     include BlueprintComponents
 
-    creates "aggregate" do |args, opts|
+    creates "aggregate" do |obj, args, opts|
       { :label => args.pop }.merge(opts)
     end
   end
@@ -63,7 +80,7 @@ module BlueprintComponents
   class Dependency < Component
     include BlueprintComponents
 
-    creates "dependency" do |args, opts|
+    creates "dependency" do |obj, args, opts|
       { :content => args.pop }.merge(opts)
     end
   end

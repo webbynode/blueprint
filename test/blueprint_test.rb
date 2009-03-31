@@ -5,11 +5,8 @@ class BlueprintTest < Test::Unit::TestCase
     blueprint "Rails" do |f|
       f.provides "rails"
 
-      f.parameter "version", :label => "Rails Version", :render_as => "combobox" do |p|
-        p.value "2.3.2"
-        p.value "2.2.2"
-        p.value "2.1.2"
-      end
+      f.parameter "version", :label => "Rails Version", :render_as => "combobox",
+        :values => ["2.3.2", "2.2.2", "2.1.2"]
 
       f.parameter "doc_rdoc", :label => "Install rdoc", :render_as => "checkbox"
       f.parameter "doc_ri",   :label => "Install ri",   :render_as => "checkbox"
@@ -18,6 +15,7 @@ class BlueprintTest < Test::Unit::TestCase
         :label => "Create dummy app?", 
         :render_as => "checkbox",
         :attributes => {:default => "y"}
+        
       f.parameter "dummyapp-path", 
         :label => "Path for dummy app",
         :render_as => "text",
