@@ -1,6 +1,11 @@
 require "blueprint/utils"
 
 module BlueprintComponents
+  BLUEPRINT_TRANSLATIONS = {
+    :render_as => :control,
+    :type => :item_type
+  }
+  
   class Component
     class << self
       attr_accessor :item_type
@@ -16,11 +21,20 @@ module BlueprintComponents
 
     def attributes(*args)
       opts = args.last.is_a?(Hash) ? args.pop : {}
-      @def.merge!(opts)
+      @def.merge!(:attributes => opts)
     end
 
     def initialize(*args)
       opts = args.last.is_a?(Hash) ? args.pop : {}
+      
+      if opts
+        opts.clone.keys.each do |k|
+          if BLUEPRINT_TRANSLATIONS.key?(k)
+            opts[BLUEPRINT_TRANSLATIONS[k]] = opts.delete(k)
+          end
+        end
+      end
+      
       @def = { :item_type => self.class.item_type }.merge(opts)
       if self.class.block
         @def.merge!(self.class.block.call(self, args, opts))

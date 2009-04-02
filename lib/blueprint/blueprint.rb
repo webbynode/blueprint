@@ -1,3 +1,4 @@
+require 'pp'
 require "blueprint/components"
 require "blueprint/utils"
 require "yaml"
@@ -22,15 +23,16 @@ class Blueprint
       @def.merge!(opts)
       
     else
-      @def[:name] ||= s
+      @def[:content] ||= s
       @def[:script] = "#{s}.sh"
-      @def[:email] = "#{s}.markdown"
+      @def[:email] = "#{s}.markdown" if @def["item_type"] == "readystack"
+      @def[:item_type] ||= "stack"
       
     end
     
     (errors ||= []) << "provides requires the blueprint name" if @def.empty?
-    (errors ||= []) << "no blueprint name found for #{@def[:content]}" unless @def.has_key?(:name)
-    (errors ||= []) << "no email template found for #{@def[:content]}" unless @def.has_key?(:email)
+    (errors ||= []) << "no blueprint name found" unless @def.has_key?(:content)
+    # (errors ||= []) << "no email template found for #{@def[:content]}" unless @def.has_key?(:email)
     (errors ||= []) << "no script found for #{@def[:content]}" unless @def.has_key?(:script)
     
     raise "Errors: #{errors * ", "}" if errors
@@ -40,7 +42,7 @@ class Blueprint
     if req.is_a?(Hash)
       requirement_def = { :group => req[:group], :contains => req[:with] }
     else
-      requirement_def = { :group => req, :contains => req }
+      requirement_def = { :group => req, :contains => [req] }
     end
     
     (@def[:dependencies] ||= []) << requirement_def
