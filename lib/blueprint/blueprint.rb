@@ -25,16 +25,20 @@ class Blueprint
     else
       @def[:content] ||= s
       @def[:script] = "#{s}.sh"
-      @def[:email] = "#{s}.markdown" if @def["item_type"] == "readystack"
+      @def[:email] = "#{s}.markdown" if @def[:item_type] == "readystack"
       @def[:item_type] ||= "stack"
       
     end
     
     (errors ||= []) << "provides requires the blueprint name" if @def.empty?
     (errors ||= []) << "no blueprint name found" unless @def.has_key?(:content)
-    # (errors ||= []) << "no email template found for #{@def[:content]}" unless @def.has_key?(:email)
     (errors ||= []) << "no script found for #{@def[:content]}" unless @def.has_key?(:script)
     
+    if @def[:item_type] == "readystack" and not @def[:email]
+      (warnings ||= []) << "no email template found for #{@def[:content]}"
+    end
+    
+    puts "Warning: #{warnings * ", "}" if warnings
     raise "Errors: #{errors * ", "}" if errors
   end
   
