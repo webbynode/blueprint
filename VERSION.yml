@@ -1,4 +1,9 @@
 --- 
+:minor: 0
+:patch: 4
 :major: 0
+<<<<<<< HEAD:VERSION.yml
 :minor: 0
 :patch: 6
+=======
+>>>>>>> 3b38f14... Version bump to 0.1.0:VERSION.yml
